@@ -13,17 +13,20 @@
 # limitations under the License.
 from __future__ import absolute_import
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import json
 import os
 import subprocess
 import re
 import shutil
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import zipfile
 
 # Python 3 compatibility imports
 from six.moves import StringIO
-from six import u as unicode
+from six import u as str
 
 from toil.test import ToilTest, needs_cwl
 
@@ -95,7 +98,7 @@ class CWLTest(ToilTest):
         testhash = "7f510ec768b424601beb8c86700343afe722ac76"
         url = "https://github.com/common-workflow-language/common-workflow-language/archive/%s.zip" % testhash
         if not os.path.exists(cwlSpec):
-            urllib.urlretrieve(url, "spec.zip")
+            urllib.request.urlretrieve(url, "spec.zip")
             with zipfile.ZipFile('spec.zip', "r") as z:
                 z.extractall()
             shutil.move("common-workflow-language-%s" % testhash, cwlSpec)
